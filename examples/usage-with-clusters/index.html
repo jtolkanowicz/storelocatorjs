@@ -51,6 +51,7 @@
 
         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
         <script src="../../dist/storelocator/js/storelocator.js"></script>
+        <script src="../data.js"></script>
         <script>
             var myStorelocator = new storelocatorjs({
                 options: {
@@ -91,6 +92,12 @@
                             styles: []
                         }
                     }
+                },
+                onReady: function(map) {
+                    this.triggerRequest({
+                        "lat": 48.86,
+                        "lng": 2.34
+                    });
                 }
             });
         </script>

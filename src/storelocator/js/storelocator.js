@@ -189,6 +189,11 @@ export default class Storelocator {
 	 */
 	initMap () {
 		// Create global variables for Google Maps
+		if (typeof data !== 'undefined') {
+			this.storesMap = new Map(Object.entries(data))
+		} else {
+			this.storesMap = new Map()
+		}
 		this.overlayGlobal = null
 		this.overlayLimit = null
 		this.markers = []
@@ -537,48 +542,12 @@ export default class Storelocator {
 		this.mapHasRequest = true
 		this.loading(true)
 
-		let requestDatas = this.serializeForm({
-			lat: lat,
-			lng: lng
-		})
+		let stores = this.storesFromCheckedCategories()
 
-		// Update search data stored
-		this.searchData.lat = lat
-		this.searchData.lng = lng
-		this.searchData.position = new window.google.maps.LatLng(lat, lng)
-
-		// Fecth configuration
-		let fetchConf = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(requestDatas)
-		}
-
-		// Fecth store datas from the web service
-		fetch(this.options.webServiceUrl, fetchConf)
-			.then(response => {
-				if (!response.ok) {
-					throw new Error(response)
-				}
-				return response
-			})
-			.then(res => res.json())
-			.then(jsonResponse => {
-				let data = jsonResponse
-
-				if (data !== null) {
-					this.parseStores({
-						stores: data,
+		this.parseStores({
+						stores: stores,
 						fitBounds: fitBounds
 					})
-				}
-			})
-			.catch(error => {
-				this.loading(false)
-				throw new Error(error)
-			})
 	}
 
 	/**
@@ -608,6 +577,23 @@ export default class Storelocator {
 		formDatas.limit = this.options.requests.storesLimit
 
 		return formDatas
+	}
+
+	/**
+	 * Get stores from storesMap
+	 * @return {Object} list of stores
+	 */
+	storesFromCheckedCategories () {
+		let stores = []
+
+		// Get all selected categories
+		this.searchFilters.forEach((filter, index) => {
+			if (filter.checked && this.storesMap.has(filter.value)) {
+				stores = stores.concat(this.storesMap.get(filter.value))
+			}
+		})
+
+		return stores
 	}
 
 	/**
