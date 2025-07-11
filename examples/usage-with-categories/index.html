@@ -50,10 +50,11 @@
         </div>
 
         <script src="../../dist/storelocator/js/storelocator.js"></script>
+		<script src="../small-data.js"></script>
         <script>
             var myStorelocator = new storelocatorjs({
                 options: {
-                    apiKey: 'CREATE_YOUR_API_KEY',
+					apiKey: 'CREATE_YOUR_API_KEY',
                     webServiceUrl: 'http://localhost:5000/storelocatorjs/europe-west1/stores',
                     map: {
                         markers: {
@@ -78,7 +79,13 @@
                             }]
                         }
                     },
-                }
+                },
+				onReady: function(map) {
+					this.triggerRequest({
+						'lat': 48.8589507,
+						'lng': 2.2770202
+					});
+				}
             });
         </script>
     </body>

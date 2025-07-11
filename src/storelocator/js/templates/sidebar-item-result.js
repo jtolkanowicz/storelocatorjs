@@ -11,10 +11,6 @@ export default function ({store, origin}) {
 				${store.title
 					? `<span class="storelocator-detailStoreTitle"><a href="" title="See on the map" class="store-center-marker-js" data-marker-index="${store.index}">${store.index + 1}. <span>${store.title}</span></a></span>`
 				: ``}
-				<a href="http://www.google.fr/maps/dir/${origin}/${store.lat},${store.lng}" title="See the itinerary on Google Maps" target="_blank" class="storelocator-detailStoreDistance">
-					<span>${store.distance.toFixed(2)}km</span>
-					${svgRoute}
-				</a>
 				${store.address
 					? `<span class="storelocator-detailStoreAddress">${store.address}</span>`
 				: ``}
